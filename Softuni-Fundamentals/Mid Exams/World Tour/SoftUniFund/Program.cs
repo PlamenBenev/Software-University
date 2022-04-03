@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SoftUni
@@ -8,39 +9,60 @@ namespace SoftUni
     {
         static void Main(string[] args)
         {
-            int[] arr = Console.ReadLine()
+            List<int> kvartala = Console.ReadLine()
                 .Split(' ')
                 .Select(int.Parse)
-                .ToArray();
-
+                .ToList();
 
             string input = Console.ReadLine();
-            int shotTargets = 0;
 
             while (input != "End")
             {
-                int index = int.Parse(input);
+                string[] token = input.Split(' ');
+                int index1 = int.Parse(token[1]);
+                int index2 = int.Parse(token[2]);
 
-                if (index < arr.Length)
+                if (token[0] == "Shoot")
                 {
-                    shotTargets++;
-                    int stat = arr[index];
-                    for (int i = 0; i < arr.Length; i++)
+
+                    if (index1 >= 0 && index1 < kvartala.Count)
                     {
-                        if (arr[i] > stat && arr[i] != -1 && index != i)
+                        kvartala[index1] -= index2;
+                        if (kvartala[index1] <= 0)
                         {
-                            arr[i] -= stat;
-                        }
-                        else if (arr[i] != -1 && index != i)
-                        {
-                            arr[i] += stat;
+                            kvartala.Remove(kvartala[index1]);
                         }
                     }
-                    arr[index] = -1;
                 }
+                else if (token[0] == "Add")
+                {
+                    if (index1 >= 0 && index1 < kvartala.Count)
+                    {
+                        kvartala.Insert(index1, index2);
+                    }
+                    else
+                        Console.WriteLine("Invalid placement!");
+                }
+                else if (token[0] == "Strike")
+                {
+                    int start = index1 - index2;
+                    int end = index1 + index2;
+                    if (start < 0 || end >= kvartala.Count)
+                    {
+                        Console.WriteLine("Strike missed!");
+
+                    }
+                    else
+                        for (int i = start; i <= end; i++)
+                        {
+                            kvartala.RemoveAt(start);
+                        }
+                }
+
                 input = Console.ReadLine();
             }
-            Console.WriteLine($"Shot targets: {shotTargets} -> {String.Join(' ', arr)}");
+            Console.WriteLine(String.Join('|', kvartala));
         }
+
     }
 }
