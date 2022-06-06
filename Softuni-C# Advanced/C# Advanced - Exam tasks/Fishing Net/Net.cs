@@ -6,12 +6,11 @@ namespace FishingNet
 {
     public class Net
     {
-        public List<Fish> Fish { get; set; }
+        public List<Fish> Fish { get; set; } = new List<Fish>();
         public string Material { get; set; }
         public int Capacity { get; set; }
         public Net(string material, int capacity)
         {
-            Fish = new List<Fish>();
             Material = material;
             Capacity = capacity;
         }
@@ -21,7 +20,7 @@ namespace FishingNet
         }
         public string AddFish(Fish fish)
         {
-            if (string.IsNullOrWhiteSpace(fish.FishType) || fish.Length <= 0 &&
+            if (string.IsNullOrWhiteSpace(fish.FishType) || fish.Length <= 0 ||
                 fish.Weight <= 0)
             {
                 return "Invalid fish.";
@@ -75,7 +74,7 @@ namespace FishingNet
         {
             List<Fish> orderList = Fish.OrderByDescending(x => x.Length).ToList();
 
-            return $"Into the cast net:{Environment.NewLine}{String.Join(Environment.NewLine, orderList)}";
+            return $"Into the {Material}:{Environment.NewLine}{String.Join(Environment.NewLine, orderList)}";
 
 
         }
