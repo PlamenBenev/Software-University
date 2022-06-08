@@ -42,7 +42,6 @@ namespace StreetRacing
             {
                 Participants.Add(car, car.LicensePlate);
             }
-            //return;
         }
         public bool Remove(string licensePlate)
         {
@@ -84,7 +83,7 @@ namespace StreetRacing
         }
         public string Report()
         {
-            string returner = $"Race: {Name} - Type: {Type} (Laps: {Laps}) {Environment.NewLine}" +
+            string returner = $"Race: {Name} - Type: {Type} (Laps: {Laps}){Environment.NewLine}" +
                 $"{ string.Join(Environment.NewLine, Participants.Keys)}";
 
             return returner;

@@ -11,30 +11,26 @@ namespace SoftUni
         {
             int armor = int.Parse(Console.ReadLine());
             int size = int.Parse(Console.ReadLine());
-            int cols = 0;
-            string input1 = Console.ReadLine();
-            cols = input1.Length;
+            int colsize = 0;
 
-            char[,] board = new char[size, cols];
+            char[][] board = new char[size][];
             int[] armyPos = new int[2];
             bool theyMadeIt = false;
 
             for (int row = 0; row < size; row++)
             {
-                for (int col = 0; col < board.GetLength(1); col++)
+                string input1 = Console.ReadLine();
+                board[row] = new char[input1.Length];
+                colsize = input1.Length;
+                for (int col = 0; col < input1.Length; col++)
                 {
-                    board[row, col] = input1[col];
-                    if (board[row, col] == 'A')
+                    board[row][col] = input1[col];
+                    if (board[row][col] == 'A')
                     {
                         armyPos[0] = row;
                         armyPos[1] = col;
                     }
                 }
-                if (row + 1 == size)
-                {
-                    break;
-                }
-                input1 = Console.ReadLine();
             }
 
             while (true)
@@ -45,40 +41,44 @@ namespace SoftUni
                 int armyRow = armyPos[0];
                 int armyCol = armyPos[1];
 
-                board[orcsRow, orcsCol] = 'O';
-                board[armyRow, armyCol] = '-';
+                board[orcsRow][orcsCol] = 'O';
+                board[armyRow][armyCol] = '-';
 
-                if (input[0] == "left" && IsItInside(armyRow, armyCol - 1, size, board.GetLength(1)))
+                if (input[0] == "left")
                 {
                     armyCol--;
                 }
-                else if (input[0] == "right" && IsItInside(armyRow, armyCol + 1, size, board.GetLength(1)))
+                else if (input[0] == "right")
                 {
                     armyCol++;
                 }
-                else if (input[0] == "up" && IsItInside(armyRow - 1, armyCol, size, board.GetLength(1)))
+                else if (input[0] == "up")
                 {
                     armyRow--;
                 }
-                else if (input[0] == "down" && IsItInside(armyRow + 1, armyCol, size,board.GetLength(1)))
+                else if (input[0] == "down")
                 {
                     armyRow++;
                 }
-                else
+
+                if (!IsItInside(armyRow,armyCol,size,colsize))
                 {
+                    armyRow = armyPos[0];
+                    armyCol = armyPos[1];
+                    board[armyRow][armyCol] = 'A';
                     armor--;
                     continue;
                 }
 
                 armor--;
 
-                if (armyRow == orcsRow && armyCol == orcsCol)
+                if (board[armyRow][armyCol] == 'O')
                 {
                     armor -= 2;
                 }
-                if (board[armyRow, armyCol] == 'M')
+                else if (board[armyRow][armyCol] == 'M')
                 {
-                    board[armyRow, armyCol] = '-';
+                    board[armyRow][armyCol] = '-';
                     theyMadeIt = true;
                     break;
                 }
@@ -86,12 +86,12 @@ namespace SoftUni
                 {
                     armyPos[0] = armyRow;
                     armyPos[1] = armyCol;
-                    board[armyRow, armyCol] = 'X';
+                    board[armyRow][armyCol] = 'X';
                     break;
                 }
                 armyPos[0] = armyRow;
                 armyPos[1] = armyCol;
-                board[armyRow, armyCol] = 'A';
+                board[armyRow][armyCol] = 'A';
             }
             if (theyMadeIt)
             {
@@ -101,11 +101,11 @@ namespace SoftUni
             {
                 Console.WriteLine($"The army was defeated at {armyPos[0]};{armyPos[1]}.");
             }
-            for (int r = 0; r < board.GetLength(0); r++)
+            for (int r = 0; r < size; r++)
             {
-                for (int c = 0; c < board.GetLength(1); c++)
+                for (int c = 0; c < colsize; c++)
                 {
-                    Console.Write(board[r, c]);
+                    Console.Write(board[r][c]);
                 }
                 Console.WriteLine();
             }

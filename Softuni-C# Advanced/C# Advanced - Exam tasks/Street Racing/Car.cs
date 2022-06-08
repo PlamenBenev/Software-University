@@ -26,7 +26,7 @@ namespace StreetRacing
                 $"Model: {Model}{Environment.NewLine}" +
                 $"License Plate: {LicensePlate}{Environment.NewLine}" +
                 $"Horse Power: {HorsePower}{Environment.NewLine}" +
-                $"Weight: {Weight}{Environment.NewLine}";
+                $"Weight: {Weight}";
 
             return returner;
         }
