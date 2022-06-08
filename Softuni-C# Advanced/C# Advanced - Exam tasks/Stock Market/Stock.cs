@@ -20,8 +20,8 @@ namespace StockMarket
         {
             string result = $"Company: {CompanyName}{Environment.NewLine}" +
                 $"Director: { Director}{Environment.NewLine}" +
-                $"Price per share: { PricePerShare}{Environment.NewLine}" +
-                $"Market capitalization: { MarketCapitalization}";
+                $"Price per share: ${ PricePerShare}{Environment.NewLine}" +
+                $"Market capitalization: ${ MarketCapitalization}";
 
             return result;
         }

@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System;
 using System.Linq;
 
 namespace StockMarket
 {
     public class Investor
     {
-        public List<Stock> Portfolio { get; set; }
+        public List<Stock> Portfolio { get; set; } = new List<Stock>();
         public string FullName { get; set; }
         public string EmailAddress { get; set; }
         public decimal MoneyToInvest { get; set; }
@@ -17,7 +18,6 @@ namespace StockMarket
             EmailAddress = email;
             MoneyToInvest = moneyToInvest;
             BrokerName = broker;
-            Portfolio = new List<Stock>();
         }
         public int Count
         {
@@ -25,7 +25,7 @@ namespace StockMarket
         }
         public void BuyStock(Stock stock)
         {
-            if (stock.MarketCapitalization > 10000 && MoneyToInvest >= stock.PricePerShare)
+            if (stock.MarketCapitalization >= 10000 && MoneyToInvest >= stock.PricePerShare)
             {
                 MoneyToInvest -= stock.PricePerShare;
                 Portfolio.Add(stock);
@@ -33,34 +33,21 @@ namespace StockMarket
         }
         public string SellStock(string companyName, decimal sellPrice)
         {
-            bool doesItExist = false;
-            bool itsBigger = false;
-            Stock stonkToRemove = null;
-
             foreach (var item in Portfolio)
             {
                 if (item.CompanyName == companyName)
                 {
-                    doesItExist = true;
-                    if (sellPrice >= item.PricePerShare)
+                    if (item.PricePerShare < sellPrice)
                     {
-                        itsBigger = true;
-                        stonkToRemove = item;
+                        MoneyToInvest += sellPrice;
+                        Portfolio.Remove(item);
+                        return $"{companyName} was sold.";
                     }
+                    else
+                        return $"Cannot sell { companyName}.";
                 }
             }
-            if (!doesItExist)
-            {
-                return $"{companyName} does not exist.";
-            }
-            if (!itsBigger)
-            {
-                return $"Cannot sell {companyName}.";
-            }
-
-            MoneyToInvest += sellPrice;
-            Portfolio.Remove(stonkToRemove);
-            return $"{companyName} was sold.";
+            return $"{companyName} does not exist.";
         }
         public Stock FindStock(string companyName)
         {
@@ -77,21 +64,22 @@ namespace StockMarket
         public Stock FindBiggestCompany()
         {
             Stock stock = null;
+            decimal biggest = 0;
             foreach (var item in Portfolio)
             {
-                if (stock != null && stock.MarketCapitalization < item.MarketCapitalization)
+                if (item.MarketCapitalization > biggest)
                 {
+                    biggest = item.MarketCapitalization;
                     stock = item;
                 }
-                else if (stock == null)
-                    stock = item;
             }
             return stock;
         }
         public string InvestorInformation()
         {
             string result = 
-                $"The investor {FullName} with a broker {BrokerName} has stocks: {string.Join('\n',Portfolio)}";
+                $"The investor {FullName} with a broker {BrokerName} has stocks:{Environment.NewLine}" + 
+                $"{string.Join(Environment.NewLine,Portfolio)}";
 
             return result;
         }
