@@ -73,7 +73,7 @@ namespace SoftUni
                     wPosition[1] = wCol;
                     break;
                 }
-                if (IsItInside(wRow, wCol + 1) && char.IsLetter(board[wRow, wCol + 1]))
+                else if (IsItInside(wRow, wCol + 1) && char.IsLetter(board[wRow, wCol + 1]))
                 {
                     wCol++;
                     wWin = true;
@@ -81,10 +81,16 @@ namespace SoftUni
                     wPosition[1] = wCol;
                     break;
                 }
-
-                board[wRow, wCol] = 'w';
-                wPosition[0] = wRow;
-                wPosition[1] = wCol;
+                else
+                {
+                    board[wRow, wCol] = 'w';
+                    wPosition[0] = wRow;
+                    wPosition[1] = wCol;
+                    if (wRow == 0)
+                    {
+                        break;
+                    }
+                }
 
                 board[bRow, bCol] = '-';
                 bRow++;
@@ -97,7 +103,7 @@ namespace SoftUni
                     bPosition[1] = bCol;
                     break;
                 }
-                if (IsItInside(bRow, bCol + 1) && char.IsLetter(board[bRow, bCol + 1]))
+                else if (IsItInside(bRow, bCol + 1) && char.IsLetter(board[bRow, bCol + 1]))
                 {
                     bCol++;
                     bWin = true;
@@ -105,10 +111,12 @@ namespace SoftUni
                     bPosition[1] = bCol;
                     break;
                 }
-
-                board[bRow, bCol] = 'b';
-                bPosition[0] = bRow;
-                bPosition[1] = bCol;
+                else
+                {
+                    board[bRow, bCol] = 'b';
+                    bPosition[0] = bRow;
+                    bPosition[1] = bCol;
+                }
             }
             if (wWin)
             {
@@ -122,7 +130,7 @@ namespace SoftUni
             {
                 Console.WriteLine($"Game over! White pawn is promoted to a queen at {realBoard[wPosition[0], wPosition[1]]}.");
             }
-            else if (wPosition[0] == 7)
+            else if (bPosition[0] == 7)
             {
                 Console.WriteLine($"Game over! Black pawn is promoted to a queen at {realBoard[bPosition[0], bPosition[1]]}.");
             }
