@@ -17,11 +17,11 @@ namespace PizzaCalories
             get { return flourType; }
             private set
             {
-                if (value == "White")
+                if (value.ToLower() == "white")
                 {
                     flourGrams = 1.5;
                 }
-                else if (value == "Wholegrain")
+                else if (value.ToLower() == "wholegrain")
                 {
                     flourGrams = 1.0;
                 }
@@ -37,15 +37,15 @@ namespace PizzaCalories
             get { return bakingTechnique; }
             private set
             {
-                if (value == "Crispy")
+                if (value.ToLower() == "crispy")
                 {
                     bakingGrams = 0.9;
                 }
-                else if (value == "Chewy")
+                else if (value.ToLower() == "chewy")
                 {
                     bakingGrams = 1.1;
                 }
-                else if (value == "Homemade")
+                else if (value.ToLower() == "homemade")
                 {
                     bakingGrams = 1.0;
                 }
@@ -63,7 +63,7 @@ namespace PizzaCalories
             {
                 if (value <= 0 || value > 200)
                 {
-                    throw new Exception("Dough weight should be in the range [1..200].");
+                    throw new ArgumentException("Dough weight should be in the range [1..200].");
                 }
                 weight = value;
             }
