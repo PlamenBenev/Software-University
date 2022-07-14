@@ -16,16 +16,16 @@ namespace Database.Tests
 
             Assert.True(database16.Count == 16);
         }
-        [Test]
-        public void ExeptionAtLength()
-        {
-            int[] datatest1 = new int[] {1};
+        //[Test]
+        //public void ExeptionAtLength()
+        //{
+        //    int[] datatest1 = new int[] {1};
 
-            Database database1 = new Database(datatest1);
+        //    Database database1 = new Database(datatest1);
 
-            Assert.That(() => database1.Count != 16,
-            Throws.InvalidOperationException);
-        }
+        //    Assert.That(() => database1.Count != 16,
+        //    Throws.InvalidOperationException);
+        //}
         [Test]
         public void AddElementAtFreeCell()
         {
@@ -71,6 +71,18 @@ namespace Database.Tests
             Assert.That(() => database1.Remove(),
             Throws.InvalidOperationException.With.Message
             .EqualTo("The collection is empty!"));
+        }
+        [Test]
+        public void FetchingFunction()
+        {
+            int[] datatest15 = new int[]
+{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+
+            Database database1 = new Database(datatest15);
+
+            int[] fetchedData = database1.Fetch();
+
+            Assert.AreEqual(fetchedData.Length, datatest15.Length);
         }
     }
 }
