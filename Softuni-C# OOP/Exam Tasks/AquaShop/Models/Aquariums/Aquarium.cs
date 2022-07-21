@@ -10,13 +10,13 @@ namespace AquaShop.Models.Aquariums
 {
     public abstract class Aquarium : IAquarium
     {
-       private string name;
-        private List<IDecoration> decorations;
-        private List<IFish> fish;
+        private string name;
+        private List<IDecoration> decorations = new List<IDecoration>();
+        private List<IFish> fish = new List<IFish>();
         public string Name
         {
             get { return name; }
-             private set
+            private set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
@@ -32,25 +32,16 @@ namespace AquaShop.Models.Aquariums
 
         public void AddDecoration(IDecoration decoration)
         {
-            Decorations.Add(decoration);
+            decorations.Add(decoration);
         }
         public void AddFish(IFish fish)
         {
-            if (this.Fish.Count >= this.Capacity)
+            if (this.fish.Count >= this.Capacity)
             {
                 throw new InvalidOperationException("Not enough capacity.");
             }
 
-            var aquType = this.GetType().Name;
-
-            var fishType = fish.GetType().Name;
-
-            if (aquType == "FreshwaterAquarium" && fishType == "SaltwaterFish" || aquType == "SaltwaterAquarium" && fishType == "FreshwaterFish")
-            {
-                throw new InvalidOperationException("Not enough capacity.");
-            }
-
-            this.Fish.Add(fish);
+            this.fish.Add(fish);
 
         }
         public void Feed()
@@ -89,7 +80,7 @@ namespace AquaShop.Models.Aquariums
             return Fish.Remove(fish);
         }
 
-        public Aquarium(string name,int capacity)
+        public Aquarium(string name, int capacity)
         {
             Name = name;
             Capacity = capacity;
