@@ -6,17 +6,17 @@ using System.Text;
 
 namespace Heroes.Models.Heroes
 {
-    public abstract class Hero
+    public abstract class Hero : IHero
     {
-        string name;
-        int hp;
-        int armor;
-        bool isItAlive = false;
-        IWeapon weapon;
+        private string name;
+        private int hp;
+        private int armor;
+        private bool isItAlive = false;
+        private IWeapon weapon;
         public string Name
         {
             get { return name; }
-            set
+            private set
             {
                 name = value;
                 if (string.IsNullOrWhiteSpace(value))
@@ -28,7 +28,7 @@ namespace Heroes.Models.Heroes
         public int Health
         {
             get { return hp; }
-            set
+            private set
             {
                 hp = value;
                 if (value < 0)
@@ -40,7 +40,7 @@ namespace Heroes.Models.Heroes
         public int Armour
         {
             get { return armor; }
-            set
+            private set
             {
                 armor = value;
                 if (value < 0)
@@ -52,7 +52,7 @@ namespace Heroes.Models.Heroes
         public bool IsItAlive
         {
             get { return isItAlive; }
-            set
+            private set
             {
                 isItAlive = value;
                 if (this.Health > 0)
@@ -65,15 +65,18 @@ namespace Heroes.Models.Heroes
         public IWeapon Weapon
         {
             get { return weapon; }
-            set
+            private set
             {
-                weapon = value;
                 if (value == null)
                 {
                     throw new ArgumentException("Weapon cannot be null.");
                 }
+                weapon = value;
             }
         }
+
+        public bool IsAlive => true;
+
         public void AddWeapon(IWeapon weapon)
         {
             if (this.Weapon == null)

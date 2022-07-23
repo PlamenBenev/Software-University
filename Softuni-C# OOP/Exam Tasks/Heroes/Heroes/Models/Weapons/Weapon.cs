@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Heroes.Models.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Heroes.Models.Weapons
 {
-    public abstract class Weapon
+    public abstract class Weapon : IWeapon
     {
-        string name;
-        int durability;
+        private string name;
+        private int durability;
         public string Name
         {
             get { return name; }
-            set
+            private set
             {
                 name = value;
                 if (string.IsNullOrWhiteSpace(value))
@@ -23,7 +24,7 @@ namespace Heroes.Models.Weapons
         public int Durability
         {
             get { return durability; }
-            set
+            protected set
             {
                 durability = value;
                 if (value < 0)
