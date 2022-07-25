@@ -11,7 +11,7 @@ namespace Heroes.Models.Heroes
         private string name;
         private int hp;
         private int armor;
-        private bool isItAlive = false;
+        private bool isItAlive = true;
         private IWeapon weapon;
         public string Name
         {
@@ -49,18 +49,6 @@ namespace Heroes.Models.Heroes
                 }
             }
         }
-        public bool IsItAlive
-        {
-            get { return isItAlive; }
-            private set
-            {
-                isItAlive = value;
-                if (this.Health > 0)
-                {
-                    isItAlive = true;
-                }
-            }
-        }
 
         public IWeapon Weapon
         {
@@ -75,7 +63,18 @@ namespace Heroes.Models.Heroes
             }
         }
 
-        public bool IsAlive => true;
+        public bool IsAlive
+        {
+            get { return isItAlive; }
+            private set
+            {
+                isItAlive = value;
+                if (Health <= 0)
+                {
+                    isItAlive = false;
+                }
+            }
+        }
 
         public void AddWeapon(IWeapon weapon)
         {
@@ -90,10 +89,12 @@ namespace Heroes.Models.Heroes
                 if (this.Armour - points <= 0)
                 {
                     transfering = points - this.Armour;
-                    this.Health -= transfering;
-                    if (this.Health < 0)
+                    this.hp -= transfering;
+                    this.Armour = 0;
+                    if (this.hp < 0)
                     {
-                        this.IsItAlive = false;
+                        Health = 0;
+                        this.isItAlive = false;
                     }
                 }
                 else
@@ -101,10 +102,11 @@ namespace Heroes.Models.Heroes
             }
             else
             {
-                this.Health -= points;
-                if (this.Health < 0)
+                this.hp -= points;
+                if (this.hp < 0)
                 {
-                    this.IsItAlive = false;
+                    Health = 0;
+                    this.isItAlive = false;
                 }
             }
         }
