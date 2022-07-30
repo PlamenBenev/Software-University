@@ -74,6 +74,15 @@
             Assert.That(() => book.AlterFootnote(321,"dsa"),
                 Throws.InvalidOperationException);
         }
+        [Test]
+        public void AlterFootnoteReturns()
+        {
+            Book book = new Book("Harry Potter", "J K Rowling");
+            book.AddFootnote(123, "asd");
 
+            book.AlterFootnote(123,"dsa");
+
+            Assert.True(book.FindFootnote(123) == $"Footnote #123: dsa");
+        }
     }
 }
