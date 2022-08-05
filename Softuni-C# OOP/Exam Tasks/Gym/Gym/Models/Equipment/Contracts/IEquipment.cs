@@ -1,4 +1,4 @@
-﻿namespace Gym.Models.Equipments.Contracts
+﻿namespace Gym.Models.Equipment.Contracts
 {
     public interface IEquipment
     {

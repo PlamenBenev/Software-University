@@ -1,6 +1,6 @@
 ﻿namespace Gym.Models.Gyms.Contracts
 {
-    using Equipments.Contracts;
+    using Equipment.Contracts;
     using Athletes.Contracts;
     using System.Collections.Generic;
 

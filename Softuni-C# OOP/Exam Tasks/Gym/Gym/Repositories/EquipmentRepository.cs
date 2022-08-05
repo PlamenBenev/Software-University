@@ -1,19 +1,13 @@
-﻿using Gym.Models.Equipments.Contracts;
+﻿using Gym.Models.Equipment.Contracts;
 using Gym.Repositories.Contracts;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Gym.Repositories
 {
     public class EquipmentRepository : IRepository<IEquipment>
     {
-        private readonly List<IEquipment> _equipmentList;
+        private readonly List<IEquipment> _equipmentList = new List<IEquipment>(); 
         public IReadOnlyCollection<IEquipment> Models => _equipmentList.AsReadOnly();
-        public EquipmentRepository()
-        {
-            _equipmentList = new List<IEquipment>();
-        }
 
         public void Add(IEquipment model)
         {

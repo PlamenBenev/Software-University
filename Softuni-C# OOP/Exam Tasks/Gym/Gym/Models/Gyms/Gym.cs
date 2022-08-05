@@ -1,5 +1,5 @@
 ﻿using Gym.Models.Athletes.Contracts;
-using Gym.Models.Equipments.Contracts;
+using Gym.Models.Equipment.Contracts;
 using Gym.Models.Gyms.Contracts;
 using System;
 using System.Collections.Generic;
@@ -13,8 +13,8 @@ namespace Gym.Models.Gyms
         private string _name;
         private int _capacity;
         private double _equipmentWeight;
-        private ICollection<IEquipment> equipmentCol = new List<IEquipment>();
-        private ICollection<IAthlete> athletesCol = new List<IAthlete>();
+        private readonly ICollection<IEquipment> equipmentCol = new List<IEquipment>();
+        private readonly ICollection<IAthlete> athletesCol = new List<IAthlete>();
 
         public Gym(string name, int capacity)
         {
@@ -45,20 +45,12 @@ namespace Gym.Models.Gyms
             get { return _equipmentWeight; }
             private set
             {
-                _equipmentWeight = equipmentCol.Sum(x => x.Weight);
+                _equipmentWeight = value;
             }
         }
-        public ICollection<IEquipment> Equipment
-        {
-            get { return equipmentCol; }
-            private set { equipmentCol = value; }
-        }
+        public ICollection<IEquipment> Equipment => equipmentCol;
 
-        public ICollection<IAthlete> Athletes
-        {
-            get { return athletesCol; }
-            private set { athletesCol = value; }
-        }
+        public ICollection<IAthlete> Athletes => athletesCol;
 
         public void AddAthlete(IAthlete athlete)
         {
@@ -72,6 +64,7 @@ namespace Gym.Models.Gyms
         public void AddEquipment(IEquipment equipment)
         {
             equipmentCol.Add(equipment);
+            EquipmentWeight += equipment.Weight;
         }
 
         public void Exercise()
@@ -87,20 +80,33 @@ namespace Gym.Models.Gyms
             string names = "No athletes";
             if (athletesCol.Count > 0)
             {
-                names = $"{string.Join(", ", athletesCol)}";
+                List<string> namesList = new List<string>();
+                foreach (var item in athletesCol)
+                {
+                    namesList.Add(item.FullName);
+                }
+                names = $"{string.Join(", ", namesList)}";
             }
 
             string returner = $"{this.Name} is a {this.GetType().Name}:{Environment.NewLine}" +
                 $"Athletes: {names}{Environment.NewLine}" +
                 $"Equipment total count: {equipmentCol.Count}{Environment.NewLine}" +
-                $"Equipment total weight: {EquipmentWeight} grams";
+                $"Equipment total weight: {_equipmentWeight:f2} grams{Environment.NewLine}";
 
             return returner;
         }
 
         public bool RemoveAthlete(IAthlete athlete)
         {
-            throw new NotImplementedException();
+            foreach (var item in athletesCol)
+            {
+                if (item == athlete)
+                {
+                    athletesCol.Remove(item);
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

@@ -4,17 +4,17 @@ using System.Text;
 
 namespace Gym.Models
 {
-    public class Boxer : Athlete
+    public class Weightlifter : Athlete
     {
-        private const int stamina = 60;
-        public Boxer(string fullName, string motivation, int numberOfMedals) 
-            : base(fullName, motivation, numberOfMedals, stamina)
+       // private int stamina = 50;
+        public Weightlifter(string fullName, string motivation, int numberOfMedals) 
+            : base(fullName, motivation, numberOfMedals, 50)
         {
         }
 
         public override void Exercise()
         {
-            this.Stamina += 15;
+            this.Stamina += 10;
             if (this.Stamina > 100)
             {
                 this.Stamina = 100;
