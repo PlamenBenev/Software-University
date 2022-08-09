@@ -8,6 +8,10 @@ namespace CarRacing.Models.Maps
 {
     public class Map : IMap
     {
+        public Map()
+        {
+
+        }
         public string StartRace(IRacer racerOne, IRacer racerTwo)
         {
             if (!racerOne.IsAvailable() && !racerTwo.IsAvailable())
