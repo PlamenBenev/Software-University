@@ -109,20 +109,24 @@ namespace WarCroft.Entities.Characters.Contracts
             if (IsAlive == true)
             {
                 double calc = Armor - hitPoints;
-                if (this.Armor > 0)
+                if (Armor > 0)
                 {
                     if (calc < 0)
                     {
-                        this.Armor = 0;
-                        Health -= calc;
+                        Armor = 0;
+                        Health += calc;
                     }
                     else
-                        this.Armor -= hitPoints;
+                        Armor -= hitPoints;
                 }
                 else
-                    this.Health -= hitPoints;
-                if (this.Health == 0)
                 {
+                    Health -= hitPoints;
+                }
+
+                if (Health <= 0)
+                {
+                    Health = 0;
                     IsAlive = false;
                 }
             }
