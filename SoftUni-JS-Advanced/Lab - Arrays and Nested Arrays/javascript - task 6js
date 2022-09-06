@@ -1,0 +1,16 @@
+ function asd(input){
+    let array = [];
+    let result = [];
+    for (let index = 0; index < input.length; index++) {
+        array[index] = input[index];
+    }
+    array.sort((a, b) => a - b);
+
+    if (array.length % 2 != 0){
+        for (let index = (array.length - 1) / 2; index < array.length; index++) {
+            result.push(array[index]);
+        }
+    }
+    console.log(result);
+}
+asd([3, 19, 14, 7, 2, 19, 6]);
