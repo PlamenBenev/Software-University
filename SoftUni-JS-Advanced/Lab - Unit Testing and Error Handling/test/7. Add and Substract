@@ -1,0 +1,38 @@
+const sum = require('../SoftuniJS');
+
+const assert = require('chai').assert;
+
+describe('calculator', function () {
+    it ('should be object',() => {
+        assert.equal(typeof(sum()),'object');
+    })
+    it ('add should be function',() =>{
+        assert.equal(typeof(sum().add),'function');
+    })
+    it ('subtract should be function',() =>{
+        assert.equal(typeof(sum().subtract),'function');
+    })
+    it ('get should be function',() =>{
+        assert.equal(typeof(sum().get),'function');
+    })
+    it ('should maintain value',() =>{
+        let result = sum();
+        
+        assert.equal(result.value,undefined);
+    })
+    it ('get should return the value of the sum',() =>{
+        let result = sum();
+        
+        assert.equal(result.get(),0);
+    })
+    it ('add should parse the num',() =>{
+        let result = sum();
+        result.add('5');
+        assert.equal(result.get(),5);
+    })
+    it ('subtract should parse the num',() =>{
+        let result = sum();
+        result.subtract('5');
+        assert.equal(result.get(),-5);
+    })
+});
