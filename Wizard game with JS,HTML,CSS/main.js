@@ -33,12 +33,14 @@ let game = {
     fireBallMultiplier: 5,
     fireInterval: 1000,
     cloudSpawned: 3000,
-    bugSpawnInterval: 1000
+    bugSpawnInterval: 1000,
+    bugKillBonus: 2000
 };
 let scene = {
     score: 0,
     lastCloudSpawn: 0,
-    lastBugSpawn: 0
+    lastBugSpawn: 0,
+    isActiveGame: true
 }
 
 document.addEventListener('keydown',(e)=>{
@@ -78,6 +80,7 @@ function gameAction(timestamp){
     scene.score++;
     gamePoints.textContent = scene.score;
     
+    
     let clouds = document.querySelectorAll('.cloud');
     clouds.forEach(cloud => {
         cloud.x -= game.speed;
@@ -110,7 +113,7 @@ function gameAction(timestamp){
         gameArea.appendChild(bug);
         scene.lastBugSpawn = timestamp;
     }
-
+    
     let bugs = document.querySelectorAll('.bug');
     bugs.forEach(bug => {
         bug.x -= game.speed * 3;
@@ -127,18 +130,35 @@ function gameAction(timestamp){
     } else {
         wizard.classList.remove('wizard-fire');
     }
-
+    
     let fireBalls = document.querySelectorAll('.fire-ball');
+    bugs.forEach(bug => {
+        if (isCollision(wizard,bug)){
+            gameOverAction();
+        }
+
+        fireBalls.forEach(x => {
+            if (isCollision(x,bug)){
+                scene.score += game.bugKillBonus;
+                bug.parentElement.removeChild(bug);
+                x.parentElement.removeChild(x);
+            }
+        })
+    })
     fireBalls.forEach(ball => {
         ball.x += game.speed * game.fireBallMultiplier;
         ball.style.left = ball.x + 'px';
+        
 
         if (ball.x + ball.offsetWidth > gameArea.offsetWidth){
             ball.parentElement.removeChild(ball);
         }
     })
 
-    window.requestAnimationFrame(gameAction);
+    if (scene.isActiveGame){
+        window.requestAnimationFrame(gameAction);
+    }
+
 }
 
 function addFireBall(){
@@ -148,4 +168,18 @@ function addFireBall(){
     fireBall.x = player.x + player.width;
     fireBall.style.left = fireBall.x + 'px';
     gameArea.appendChild(fireBall);
+}
+
+function isCollision(firstEl,secondEl){
+    let firstRect = firstEl.getBoundingClientRect();
+    let secondRect = secondEl.getBoundingClientRect();
+
+    return !(firstRect.top > secondRect.bottom ||
+        firstRect.bottom < secondRect.top ||
+        firstRect.right < secondRect.left ||
+        firstRect.left > secondRect.right);
+}
+function gameOverAction(){
+    scene.isActiveGame = false;
+    gameOver.classList.remove('hide');
 }
