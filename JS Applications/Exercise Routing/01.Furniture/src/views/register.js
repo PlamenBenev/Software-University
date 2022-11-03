@@ -33,20 +33,20 @@ export const registerPage = (ctx) => {
     
     const registerHandler = (e) => {
         e.preventDefault();
-        const form = new FormData(e.target);
-        const email = form.get('email');
-        const password = form.get('password');
-        const rePass = form.get('rePass');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const rePass = document.getElementById('rePass');
         
-        if (!email || !password || !rePass) {
+        if (!email.value || !password.value || !rePass.value) {
             return alert("Empty fields");
         }
         
-        if (rePass != password) {
+        if (rePass.value != password.value) {
             return alert('Password does not match');
         }
         
-        api.registerAuth(email, password);
+        api.registerRequest(email.value, password.value);
+
         e.target.reset();
         ctx.page.redirect('/dashboard')
     }

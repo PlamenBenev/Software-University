@@ -1,6 +1,7 @@
 import {html } from '../../node_modules/lit-html/lit-html.js';
+import { dashboardRequest } from '../api/api.js';
 
-const dashboardTemplate = () => html`
+const dashboardTemplate = (img,description,price) => html`
 <div class="row space-top">
             <div class="col-md-12">
                 <h1>Welcome to Furniture System</h1>
@@ -11,38 +12,10 @@ const dashboardTemplate = () => html`
             <div class="col-md-4">
                 <div class="card text-white bg-primary">
                     <div class="card-body">
-                            <img src="/images/table.png" />
-                            <p>Description here</p>
+                            <img src="${img}" />
+                            <p>${description}</p>
                             <footer>
-                                <p>Price: <span>235 $</span></p>
-                            </footer>
-                            <div>
-                                <a href=”#” class="btn btn-info">Details</a>
-                            </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card text-white bg-primary">
-                    <div class="card-body">
-                            <img src="/images/sofa.jpg" />
-                            <p>Description here</p>
-                            <footer>
-                                <p>Price: <span>1200 $</span></p>
-                            </footer>
-                            <div>
-                                <a href=”#” class="btn btn-info">Details</a>
-                            </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card text-white bg-primary">
-                    <div class="card-body">
-                            <img src="/images/chair.jpg" />
-                            <p>Description here</p>
-                            <footer>
-                                <p>Price: <span>55 $</span></p>
+                                <p>Price: <span>${price} $</span></p>
                             </footer>
                             <div>
                                 <a href=”#” class="btn btn-info">Details</a>
@@ -53,5 +26,9 @@ const dashboardTemplate = () => html`
         </div>`;
 
 export const dashboardPage = (ctx) => {
-    ctx.render(dashboardTemplate());
+    dashboardRequest().then(x => {
+        console.log(x);
+        ctx.render(dashboardTemplate(x.img,x.description,x.price));
+    })
+    ctx.setUserNav();
 }

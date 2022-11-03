@@ -1,13 +1,14 @@
 import {html } from '../../node_modules/lit-html/lit-html.js';
+import { createRequest } from '../api/api.js';
 
-const createTemplate = () => html`
+const createTemplate = (createHandler) => html`
 <div class="row space-top">
             <div class="col-md-12">
                 <h1>Create New Furniture</h1>
                 <p>Please fill all fields.</p>
             </div>
         </div>
-        <form>
+        <form @submit="${createHandler}">
             <div class="row space-top">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -46,5 +47,34 @@ const createTemplate = () => html`
         </form>`;
 
 export const createPage = (ctx) => {
-    ctx.render(createTemplate());
+
+    const createHandler = (e) => {
+        e.preventDefault();
+
+        const data = new FormData(e.target);
+
+        const make = data.get('make');
+        const model = data.get('model');
+        const year = data.get('year');
+        const description = data.get('description');
+        const price = data.get('price');
+        const img = data.get('img');
+        const material = data.get('material');
+
+        const body = {
+            make: make,
+            model: model,
+            year: year,
+            description: description,
+            price: price,
+            img: img,
+            material: material,
+        }
+
+        createRequest(body);
+        e.target.reset();
+        ctx.page.redirect('/myPublications')
+    }
+    ctx.setUserNav();
+    ctx.render(createTemplate(createHandler));
 }
