@@ -1,5 +1,6 @@
 import {html } from '../../node_modules/lit-html/lit-html.js';
 import { createRequest } from '../api/api.js';
+import { validation } from './edit.js';
 
 const createTemplate = (createHandler) => html`
 <div class="row space-top">
@@ -56,11 +57,15 @@ export const createPage = (ctx) => {
 
         const make = data.get('make');
         const model = data.get('model');
-        const year = data.get('year');
+        const year = Number(data.get('year'));
         const description = data.get('description');
-        const price = data.get('price');
+        const price = Number(data.get('price'));
         const img = data.get('img');
         const material = data.get('material');
+
+        if (!validation(make,model,year,description,price,img)){
+            return;
+        }
 
         const body = {
             make: make,

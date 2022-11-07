@@ -68,6 +68,11 @@ export const editPage = (ctx) => {
         const img = data.get('img');
         const material = data.get('material');
 
+
+        if (!validation(make,model,year,description,price,img)){
+            return;
+        }
+
         const body = {
             make: make,
             model: model,
@@ -80,13 +85,38 @@ export const editPage = (ctx) => {
 
         api.editRequest(ctx.params.id, body)
             .then(x => {
-                //  e.target.reset();
                 ctx.page.redirect('/')
             })
 
 
     }
-    //ctx.render(editTemplate(submit));
-
 }
 
+export function validation(make, model, year, description, price, img) {
+    if (price <= 0) {
+        alert('Price must be more then 0');
+        return false;
+    }
+    if (img == '') {
+        alert('Invalid image URL');
+        return false;
+    }
+    if (description.length <= 10) {
+        alert('description length must be more then 10 letters');
+        return false;
+    }
+    if (year < 1950 || year > 2500) {
+        alert('year must be between 1950 and 2500');
+        return false;
+    }
+    if (model.length < 4) {
+        alert('model length must be more then 4 letters');
+        return false;
+    }
+    if (make.length < 4) {
+        alert('make length must be more then 4 letters');
+        return false;
+    }
+
+    return true;
+}
