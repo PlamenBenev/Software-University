@@ -23,7 +23,7 @@ export function loginRequest(body){
 }
 
 export function logoutRequest(){
-    const getOption = getOptions('delete')
+    const getOption = getOptions('get')
     const result = request(url + '/users/logout',getOption)
     .then(x => {
         sessionStorage.removeItem('userId',x._id);
@@ -64,6 +64,13 @@ export function deleteRequest(id){
 export function editRequest(id,body){
     const getOption = getOptions('put',body);
     const result = request(url + '/data/albums/' + id, getOption);
+
+    return result;
+}
+
+export function searchRequest(query){
+    const getOption = getOptions('get');
+    const result = request(url + `/data/albums?where=name%20LIKE%20%22${query}%22`,getOption);
 
     return result;
 }

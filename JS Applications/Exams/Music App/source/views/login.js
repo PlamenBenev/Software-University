@@ -45,7 +45,7 @@ export const loginPage = (ctx) =>{
         loginRequest(body)
         .then(x =>{
             ctx.userNavBar();
-            ctx.page.redirect('/home');
+            ctx.page.redirect('/');
         })
     }
     ctx.render(loginTemplate(takeData));

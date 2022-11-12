@@ -54,7 +54,7 @@ export const registerPage = (ctx) => {
         registerRequest(body)
         .then(x => {
             ctx.userNavBar();
-            ctx.page.redirect('/home');
+            ctx.page.redirect('/');
         })
     }
     ctx.render(registerTemplate(takeData));

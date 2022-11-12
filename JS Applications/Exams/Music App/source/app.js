@@ -8,12 +8,13 @@ import { catalogPage } from "./views/catalog.js";
 import { createPage } from "./views/create.js";
 import { detailsPage } from "./views/details.js";
 import { editPage } from "./views/edit.js";
+import { searchPage } from "./views/search.js";
 
 const container = document.getElementById('main-content')
 
 export function userNavBar(){
     const userId = sessionStorage.getItem('userId');
-    const test = true
+
     if (!userId){
         document.getElementById('guest').style.display = 'inline';
         document.getElementById('user').style.display = 'none';
@@ -25,13 +26,14 @@ export function userNavBar(){
 
 page(renderMiddleware);
 
-page('/home',renderMiddleware,homePage);
+page('/',renderMiddleware,homePage);
 page('/register',renderMiddleware,registerPage);
 page('/login',renderMiddleware,loginPage);
 page('/catalog',renderMiddleware,catalogPage);
 page('/createAlbum',renderMiddleware,createPage);
 page(`/details/:id`,renderMiddleware,detailsPage);
 page(`/edit/:id`,renderMiddleware,editPage);
+page('/search',renderMiddleware,searchPage);
 
 page();
 
@@ -47,6 +49,6 @@ document.getElementById('logout').addEventListener('click',(e)=>{
     logoutRequest()
     .then(x => {
         userNavBar();
-        page.redirect('/home')
+        page.redirect('/')
     })
 })

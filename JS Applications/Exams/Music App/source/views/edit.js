@@ -18,7 +18,7 @@ const editTemplate = (giveData,takeData) => html`
                 <input id="price" name="price" class="price" type="text" value="${giveData.price}">
 
                 <label for="releaseDate" class="vhide">Release date</label>
-                <input id="releaseDate" name="releaseDate" class="releaseDate" type="text" value="${giveData.date}">
+                <input id="releaseDate" name="releaseDate" class="releaseDate" type="text" value="${giveData.releaseDate}">
 
                 <label for="artist" class="vhide">Artist</label>
                 <input id="artist" name="artist" class="artist" type="text" value="${giveData.artist}">
