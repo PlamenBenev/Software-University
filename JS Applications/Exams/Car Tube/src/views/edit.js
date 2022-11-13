@@ -1,41 +1,43 @@
 import { html } from "../../node_modules/lit-html/lit-html.js";
-import { createRequest } from "../api.js";
+import { detailsRequest, editRequest } from "../api.js";
 
-const createTemplate = (takeData) => html`
-<section id="create-listing">
+const editTemplate = (takeData,oldData) => html`
+<section id="edit-listing">
     <div class="container">
-        <form @submit="${takeData}" id="create-form">
-            <h1>Create Car Listing</h1>
-            <p>Please fill in this form to create an listing.</p>
+
+        <form @submit="${takeData}" id="edit-form">
+            <h1>Edit Car Listing</h1>
+            <p>Please fill in this form to edit an listing.</p>
             <hr>
 
             <p>Car Brand</p>
-            <input type="text" placeholder="Enter Car Brand" name="brand">
+            <input type="text" placeholder="Enter Car Brand" name="brand" value="${oldData.brand}">
 
             <p>Car Model</p>
-            <input type="text" placeholder="Enter Car Model" name="model">
+            <input type="text" placeholder="Enter Car Model" name="model" value="${oldData.model}">
 
             <p>Description</p>
-            <input type="text" placeholder="Enter Description" name="description">
+            <input type="text" placeholder="Enter Description" name="description" value="${oldData.description}">
 
             <p>Car Year</p>
-            <input type="number" placeholder="Enter Car Year" name="year">
+            <input type="number" placeholder="Enter Car Year" name="year" value="${oldData.year}">
 
             <p>Car Image</p>
-            <input type="text" placeholder="Enter Car Image" name="imageUrl">
+            <input type="text" placeholder="Enter Car Image" name="imageUrl" value="${oldData.imageUrl}">
 
             <p>Car Price</p>
-            <input type="number" placeholder="Enter Car Price" name="price">
+            <input type="number" placeholder="Enter Car Price" name="price" value="${oldData.price}">
 
             <hr>
-            <input type="submit" class="registerbtn" value="Create Listing">
+            <input type="submit" class="registerbtn" value="Edit Listing">
         </form>
     </div>
 </section>`
 
-export const createPage = (ctx) => {
+export const editPage = (ctx) => {
     ctx.navBar();
-    const takeData = (e) => {
+
+    const takeData = (e) =>{
         e.preventDefault();
         const data = new FormData(e.target);
         const brand = data.get('brand');
@@ -63,10 +65,14 @@ export const createPage = (ctx) => {
             price: price
         }
 
-        createRequest(body)
+        editRequest(ctx.params.id,body)
         .then(x => {
             ctx.page.redirect('/allListings');
         })
     }
-    ctx.render(createTemplate(takeData));
+    detailsRequest(ctx.params.id)
+    .then(x => {
+        ctx.render(editTemplate(takeData,x));
+
+    })
 }

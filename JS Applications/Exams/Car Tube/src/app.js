@@ -7,6 +7,10 @@ import { loginPage } from "./views/login.js";
 import { homePage } from "./views/home.js";
 import { allListingsPage } from "./views/allListings.js";
 import { createPage } from "./views/create.js";
+import { detailsPage } from "./views/details.js";
+import { editPage } from "./views/edit.js";
+import { myListingsPage } from "./views/myListings.js";
+import { searchPage } from "./views/search.js";
 
 const container = document.getElementById('site-content');
 
@@ -16,6 +20,7 @@ function navBar(){
     if (userId){
         document.getElementById('guest').style.display = 'none';
         document.getElementById('profile').style.display = 'inline';
+        document.getElementById('welcomeMsg').textContent = `Welcome ${sessionStorage.getItem('username')}`;
     } else {
         document.getElementById('guest').style.display = 'inline';
         document.getElementById('profile').style.display = 'none';
@@ -27,7 +32,11 @@ page('/register',renderMiddleware,registerPage);
 page('/login',renderMiddleware,loginPage);
 page('/',renderMiddleware,homePage);
 page('/allListings',renderMiddleware,allListingsPage);
-page('/create',renderMiddleware,createPage)
+page('/create',renderMiddleware,createPage);
+page('/details/:id',renderMiddleware,detailsPage);
+page('/edit/:id',renderMiddleware,editPage);
+page('/myListings',renderMiddleware,myListingsPage);
+page('/byYear',renderMiddleware,searchPage);
 
 page();
 

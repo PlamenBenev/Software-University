@@ -1,8 +1,7 @@
 import { html } from "../../node_modules/lit-html/lit-html.js";
-import { allListingsRequest } from "../api.js";
+import { myListingsRequest } from "../api.js";
 
 const recordTemplate = (data) => html`
-<!-- Display all records -->
 <div class="listing">
     <div class="preview">
         <img src="${data.imageUrl}">
@@ -19,22 +18,25 @@ const recordTemplate = (data) => html`
     </div>
 </div>`
 
-const allListingsTemplate = (data) => html`
-<section id="car-listings">
-    <h1>Car Listings</h1>
+const myListingsTemplate = (data) => html`
+<section id="my-listings">
+    <h1>My car listings</h1>
     <div class="listings">
 
+        <!-- Display all records -->
+        <!-- Display if there are no records -->
         ${data.length != 0 
         ? html`${data.map(x => recordTemplate(x))}`
-        : html`<p class="no-cars">No cars in database.</p>`}
+        : html`<p class="no-cars"> You haven't listed any cars yet.</p>`}
     </div>
 </section>`
 
-export const allListingsPage = (ctx) => {
+export const myListingsPage = (ctx) => {
     ctx.navBar();
 
-    allListingsRequest()
-    .then(data => {
-        ctx.render(allListingsTemplate(data));
-    })
+    const userId = sessionStorage.getItem('userId');
+    myListingsRequest(userId)
+        .then(data => {
+                ctx.render(myListingsTemplate(data));
+        })
 }
