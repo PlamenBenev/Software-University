@@ -4,6 +4,10 @@ import { homePage } from './views/home.js';
 import { registerPage } from './views/register.js';
 import { logoutRequest } from './api.js';
 import { loginPage } from './views/login.js';
+import { createPage } from './views/create.js';
+import { editPage } from './views/edit.js';
+import { allGamesPage } from './views/allGames.js';
+import { detailsPage } from './views/details.js';
 
 const container = document.getElementById('main-content');
 
@@ -12,6 +16,10 @@ page(renderMiddleware);
 page('/', renderMiddleware, homePage);
 page('/register',renderMiddleware,registerPage);
 page('/login',renderMiddleware,loginPage);
+page('/create',renderMiddleware,createPage);
+page('/edit/:id',renderMiddleware,editPage);
+page('/allGames',renderMiddleware,allGamesPage);
+page('/details/:id',renderMiddleware,detailsPage);
 
 page();
 

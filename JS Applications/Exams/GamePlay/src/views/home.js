@@ -6,7 +6,7 @@ const gamesTemplate = (data) => html`
     <div class="image-wrap">
         <img src="${data.imageUrl}">
     </div>
-    <h3>${data.name}</h3>
+    <h3>${data.title}</h3>
     <div class="rating">
         <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
     </div>

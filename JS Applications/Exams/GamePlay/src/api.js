@@ -7,6 +7,38 @@ export function homeRequest(){
     return result;
 }
 
+export function createRequest(body){
+    const getOption = getOptions('post',body)
+    const result = request(url + `/data/games`,getOption)
+    
+    return result;
+}
+export function editRequest(body,id){
+    const getOption = getOptions('put',body)
+    const result = request(url + `/data/games/` + id,getOption)
+    
+    return result;
+}
+export function deleteRequest(id){
+    const getOption = getOptions('delete')
+    const result = request(url + `/data/games/` + id,getOption)
+    
+    return result;
+}
+export function detailsRequest(id){
+    const getOption = getOptions('get')
+    const result = request(url + `/data/games/` + id,getOption)
+    
+    return result;
+}
+
+export function allGamesRequest(){
+    const getOption = getOptions('get')
+    const result = request(url + `/data/games?sortBy=_createdOn%20desc`,getOption)
+    
+    return result;
+}
+
 export function registerRequest(body){
     const getOption = getOptions('post',body)
     const result = request(url + `/users/register`,getOption)
