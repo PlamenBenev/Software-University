@@ -1,8 +1,12 @@
 import { html } from '../../node_modules/lit-html/lit-html.js';
-import { deleteRequest, detailsRequest } from '../api.js';
+import { commentsRequest, createCommentRequest, deleteRequest, detailsRequest } from '../api.js';
 
+const comment = (comments) => html`
+<li class="comment">
+    <p>Content: ${comments.comment}</p>
+</li>`
 
-const detailsTemplate = (data,isOwner,onDelete) => html`
+const detailsTemplate = (data,comments,isOwner,isLogged,onDelete,takeComment) => html`
 <section id="game-details">
     <h1>Game Details</h1>
     <div class="info-section">
@@ -22,16 +26,10 @@ const detailsTemplate = (data,isOwner,onDelete) => html`
         <div class="details-comments">
             <h2>Comments:</h2>
             <ul>
-                <!-- list all comments for current game (If any) -->
-                <li class="comment">
-                    <p>Content: I rate this one quite highly.</p>
-                </li>
-                <li class="comment">
-                    <p>Content: The best game.</p>
-                </li>
-            </ul>
-            <!-- Display paragraph: If there are no games in the database -->
-            <p class="no-comment">No comments.</p>
+          ${comments.length != 0 
+        ? html`${comments.map(x => comment(x))}`
+        : html`<p class="no-comment">No comments.</p>`}
+        </ul>
         </div>
 
         <!-- Edit/Delete buttons ( Only for creator of this game )  -->
@@ -45,13 +43,13 @@ const detailsTemplate = (data,isOwner,onDelete) => html`
 
     <!-- Bonus -->
     <!-- Add Comment ( Only for logged-in users, which is not creators of the current game ) -->
-    <article class="create-comment">
+    ${isLogged && !isOwner ? html`<article class="create-comment">
         <label>Add new comment:</label>
-        <form class="form">
+        <form @submit="${takeComment}" class="form">
             <textarea name="comment" placeholder="Comment......"></textarea>
             <input class="btn submit" type="submit" value="Add Comment">
         </form>
-    </article>
+    </article>`:null}
 
 </section>`
 
@@ -61,13 +59,41 @@ export const detailsPage = (ctx) =>{
     detailsRequest(ctx.params.id)
     .then(x => {
         const isOwner = sessionStorage.getItem('userId') == x._ownerId;
+        const isLogged = sessionStorage.getItem('userId') != null;
         function onDelete(){
             deleteRequest(ctx.params.id)
             .then(x =>{
                 ctx.page.redirect('/allGames');
             })
         }
-        ctx.render(detailsTemplate(x,isOwner,onDelete));
+        const takeComment = (e) => {
+            e.preventDefault();
+            const data = new FormData(e.target);
+            const comment = data.get('comment');
+
+            if (!comment){
+                alert('Empty fields');
+                return;
+            }
+
+            const body = {
+                gameId: x._id,
+                comment: comment
+            }
+
+            createCommentRequest(body)
+            .then(s => {
+                ctx.page.redirect(`/details/${ctx.params.id}`)
+            })
+        }
+        console.log(x._id);
+        console.log(ctx.params.id);
+        commentsRequest(ctx.params.id)
+        .then(c => {
+            console.log(c);
+            ctx.render(detailsTemplate(x,c,isOwner,isLogged,onDelete,takeComment));
+        })
+
         
     })
 }

@@ -39,6 +39,20 @@ export function allGamesRequest(){
     return result;
 }
 
+export function commentsRequest(gameId){
+    const getOption = getOptions('get')
+    const result = request(url + `/data/comments?where=gameId%3D%22${gameId}%22`,getOption)
+    
+    return result;
+}
+
+export function createCommentRequest(body){
+    const getOption = getOptions('post',body)
+    const result = request(url + `/data/comments`,getOption)
+    
+    return result;
+}
+
 export function registerRequest(body){
     const getOption = getOptions('post',body)
     const result = request(url + `/users/register`,getOption)
