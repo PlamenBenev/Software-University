@@ -19,10 +19,24 @@ VALUES
 (103,'Oracle 11g')
 
 CREATE TABLE StudentsExams (
-StudentID INT PRIMARY KEY
-ExamID INT)
+StudentID INT,
+ExamID INT,
+CONSTRAINT FK_StudentsExams
+PRIMARY KEY (StudentID,ExamID),
 
-ALTER TABLE StudentsExams
-ADD CONSTRAINT FK_StudentsExams_Exams
+CONSTRAINT FK_StudentsExams_Students
+FOREIGN KEY (StudentID)
+REFERENCES Students(StudentID),
+
+CONSTRAINT FK_StudentsExams_Exams
 FOREIGN KEY (ExamID)
-REFERENCES Exams(ExamID)
+REFERENCES Exams(ExamID))
+
+INSERT INTO StudentsExams (StudentID,ExamID)
+VALUES
+(1,101),
+(1,102),
+(2,101),
+(3,103),
+(2,102),
+(2,103)
