@@ -1,17 +1,27 @@
-SELECT CONCAT(e.FirstName,' ',e.LastName) AS Employee,
-	D.Name AS Department,
-	c.Name AS Category,
-	r.Description,
-	Format(r.OpenDate,'dd-mm-yyyy'),
-	s.Label AS Status,
-	u.Name AS [User]
-FROM Employees e
-LEFT JOIN Departments d ON e.DepartmentId = d.Id
-LEFT JOIN Categories c ON c.DepartmentId = d.Id
-LEFT JOIN Reports r ON c.Id = r.CategoryId
-LEFT JOIN Status s ON r.StatusId = s.Id
-LEFT JOIN Users u ON u.Age = r.UserId
-GROUP BY e.FirstName,e.LastName,d.Name,c.Name,r.Description,
-	r.OpenDate,s.Label
-ORDER BY E.FirstName DESC,e.LastName DESC,
-d.Name,c.Name,r.Description,r.OpenDate,s.Label,u.Name
+SELECT 
+    CASE WHEN COALESCE(e.FirstName,e.LastName) IS NOT NULL
+THEN CONCAT(e.FirstName,' ',e.LastName)
+ELSE
+'None'
+END AS Employee,
+    ISNULL(D.Name, 'None') AS DepartmentName,
+    ISNULL(C.Name, 'None') AS CategoryName,
+    ISNULL(R.Description, 'None') AS ReportDescription,
+    Format(ISNULL(R.OpenDate, 'None'), 'dd.MM.yyyy') AS OpenDate,
+    ISNULL(S.Label, 'None') AS StatusLabel,
+    ISNULL(U.Name, 'None') AS UserName
+FROM Reports R
+LEFT JOIN Employees E ON R.EmployeeId = E.Id
+LEFT JOIN Departments D ON E.DepartmentId = D.Id
+LEFT JOIN Categories C ON R.CategoryId = C.Id
+LEFT JOIN Status S ON R.StatusId = S.Id
+LEFT JOIN Users U ON R.UserId = U.Id
+ORDER BY 
+    E.FirstName DESC,
+    E.LastName DESC,
+    D.Name ASC,
+    C.Name ASC,
+    R.Description ASC,
+    R.OpenDate ASC,
+    S.Label ASC,
+    U.Name ASC
