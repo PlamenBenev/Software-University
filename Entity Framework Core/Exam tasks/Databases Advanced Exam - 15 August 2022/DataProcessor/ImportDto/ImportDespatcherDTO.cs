@@ -19,6 +19,6 @@ namespace Trucks.DataProcessor.ImportDto
 
         [Required]
         public string Position { get; set; }
-        public List<ImportTruckDTO> Trucks { get; set; }
+        public ImportTruckDTO[] Trucks { get; set; }
     }
 }

@@ -1,11 +1,15 @@
 ﻿namespace Trucks.DataProcessor
 {
     using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics;
     using System.Text;
     using System.Xml.Serialization;
+    using Castle.Core.Internal;
     using Data;
     using Newtonsoft.Json;
     using Trucks.Data.Models;
+    using Trucks.Data.Models.Enums;
+    using Trucks.DataProcessor.ExportDto;
     using Trucks.DataProcessor.ImportDto;
 
     public class Deserializer
@@ -21,14 +25,17 @@
         public static string ImportDespatcher(TrucksContext context, string xmlString)
         {
             var sb = new StringBuilder();
-            var serializer = new XmlSerializer(typeof(ImportDespatcherDTO[]),
-                new XmlRootAttribute("Despatchers"));
-            var despatchersDes = (ImportDespatcherDTO[])serializer
-                .Deserialize(new StringReader(xmlString));
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(ImportDespatcherDTO[]), new XmlRootAttribute("Despatchers"));
 
-            foreach (var despatcherJson in despatchersDes)
+            using StringReader stringReader = new StringReader(xmlString);
+            ImportDespatcherDTO[] despatcherDtos = 
+                (ImportDespatcherDTO[])xmlSerializer.Deserialize(stringReader);
+
+
+
+            foreach (var despatcherJson in despatcherDtos)
             {
-                if (!IsValid(despatcherJson))
+                if (!IsValid(despatcherJson) || string.IsNullOrEmpty(despatcherJson.Position))
                 {
                     sb.AppendLine(ErrorMessage);
                     continue;
@@ -54,12 +61,12 @@
                         VinNumber = truck.VinNumber,
                         TankCapacity = truck.TankCapacity,
                         CargoCapacity = truck.CargoCapacity,
-                        CategoryType = truck.Category,
-                        MakeType = truck.Make,
+                        CategoryType = (CategoryType)truck.CategoryType,
+                        MakeType = (MakeType)truck.MakeType,
                     };
                     data.Trucks.Add(despTruck);
                 }
-                context.Despatchers.Add(data);
+                context.Despatchers.Add(data );
                 context.SaveChanges();
                 sb.AppendLine($"Successfully imported despatcher - {data.Name} with {data.Trucks.Count} trucks.");
             }
@@ -69,8 +76,8 @@
         public static string ImportClient(TrucksContext context, string jsonString)
         {
             var sb = new StringBuilder();
-            var serializer = JsonConvert
-                .DeserializeObject<IEnumerable<ClientsImportDTO>>(jsonString);
+            ClientsImportDTO[] serializer = JsonConvert
+                .DeserializeObject<ClientsImportDTO[]>(jsonString);
 
             foreach (var item in serializer)
             {
