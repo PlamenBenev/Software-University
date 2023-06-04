@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Watchlist.Data.Models
@@ -19,6 +20,7 @@ namespace Watchlist.Data.Models
         public string ImageUrl { get; set; } = null!;
 
         [Required]
+        [Precision(18, 2)]
         [Range(0.00,10.00)]
         public decimal Rating { get; set; }
 

@@ -18,9 +18,20 @@ namespace Watchlist.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<UserMovie>().HasKey(x => new { x.UserId, x.MovieId });
+            builder.Entity<UserMovie>()
+                .HasKey(x => new { x.UserId, x.MovieId });
 
-           /* builder
+            builder.Entity<User>()
+                .Property(n => n.UserName)
+                .HasMaxLength(20)
+                .IsRequired();
+
+            builder.Entity<User>()
+                .Property(n => n.Email)
+                .HasMaxLength(60)
+                .IsRequired();
+
+            builder
                 .Entity<Genre>()
                 .HasData(new Genre()
                 {
@@ -47,7 +58,7 @@ namespace Watchlist.Data
                     Id = 5,
                     Name = "Romantic"
                 });
-           */
+
             base.OnModelCreating(builder);
         }
     }
