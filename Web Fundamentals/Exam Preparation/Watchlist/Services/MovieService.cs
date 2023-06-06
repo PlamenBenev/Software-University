@@ -34,9 +34,9 @@ namespace Watchlist.Services
 		public async Task AddMovieToCollectionAsync(int movieId, string userId)
 		{
 			var user = await context.Users
-	.Where(u => u.Id == userId)
-	.Include(u => u.UsersMovies)
-	.FirstOrDefaultAsync();
+				.Where(u => u.Id == userId)
+				.Include(u => u.UsersMovies)
+				.FirstOrDefaultAsync();
 
 			if (user == null)
 			{
@@ -113,8 +113,6 @@ namespace Watchlist.Services
 			var user = await context.Users
 				.Where(u => u.Id == userId)
 				.Include(u => u.UsersMovies)
-				.ThenInclude(um => um.Movie)
-				.ThenInclude(m => m.Genre)
 				.FirstOrDefaultAsync();
 
 			if (user == null)

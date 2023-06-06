@@ -7,110 +7,110 @@ using Watchlist.Models;
 
 namespace Watchlist.Controllers
 {
-    [Authorize]
-    public class UserController : Controller
-    {
-        private readonly UserManager<User> userManager;
-        private readonly SignInManager<User> signInManager;
+	[Authorize]
+	public class UserController : Controller
+	{
+		private readonly UserManager<User> userManager;
+		private readonly SignInManager<User> signInManager;
 
-        public UserController(UserManager<User> _userManager,
-            SignInManager<User> _signInManager)
-        {
-            userManager = _userManager;
-            signInManager = _signInManager;
-        }
+		public UserController(UserManager<User> _userManager,
+			SignInManager<User> _signInManager)
+		{
+			userManager = _userManager;
+			signInManager = _signInManager;
+		}
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+		public IActionResult Index()
+		{
+			return View();
+		}
 
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult Register() 
-        {
+		[AllowAnonymous]
+		[HttpGet]
+		public IActionResult Register()
+		{
 			if (User?.Identity?.IsAuthenticated ?? false)
 			{
 				return RedirectToAction("All", "Movies");
 			}
 
 			return View(new RegisterViewModel());
-        }
+		}
 
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(registerViewModel);
-            }
+		[AllowAnonymous]
+		[HttpPost]
+		public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(registerViewModel);
+			}
 
-            var user = new User()
-            {
-                Email = registerViewModel.Email,
-                UserName = registerViewModel.Username
-            };
+			var user = new User()
+			{
+				Email = registerViewModel.Email,
+				UserName = registerViewModel.Username
+			};
 
-            var result = await userManager.CreateAsync(user, registerViewModel.Password);
+			var result = await userManager.CreateAsync(user, registerViewModel.Password);
 
-            if (result.Succeeded)
-            {
-                // await signInManager.SignInAsync(user, isPersistent: false);
+			if (result.Succeeded)
+			{
+				// await signInManager.SignInAsync(user, isPersistent: false);
 
-                return RedirectToAction("Login", "User");
-            }
+				return RedirectToAction("Login", "User");
+			}
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("",error.Description);
-            }
+			foreach (var error in result.Errors)
+			{
+				ModelState.AddModelError("", error.Description);
+			}
 
-            return View(registerViewModel);
-        }
+			return View(registerViewModel);
+		}
 
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult Login()
-        {
+		[AllowAnonymous]
+		[HttpGet]
+		public IActionResult Login()
+		{
 			if (User?.Identity?.IsAuthenticated ?? false)
 			{
 				return RedirectToAction("All", "Movies");
 			}
 
 			return View(new LoginViewModel());
-        }
+		}
 
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(loginViewModel);
-            }
-            var user = await userManager.FindByNameAsync(loginViewModel.Username);
-            
-            if (user != null)
-            {
-                var result = await signInManager.PasswordSignInAsync(user,loginViewModel.Password,false,false);
+		[AllowAnonymous]
+		[HttpPost]
+		public async Task<IActionResult> Login(LoginViewModel loginViewModel)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(loginViewModel);
+			}
+			var user = await userManager.FindByNameAsync(loginViewModel.Username);
 
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("All", "Movies");
-                }
-            }
+			if (user != null)
+			{
+				var result = await signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
 
-            ModelState.AddModelError("", "Invalid Input");
+				if (result.Succeeded)
+				{
+					return RedirectToAction("All", "Movies");
+				}
+			}
 
-            return View(loginViewModel);
-        }
+			ModelState.AddModelError("", "Invalid Input");
 
-        public async Task<IActionResult> Logout()
-        {
-           await signInManager.SignOutAsync();
+			return View(loginViewModel);
+		}
 
-            return RedirectToAction("Index", "Home");
-        }
-    }
+		public async Task<IActionResult> Logout()
+		{
+			await signInManager.SignOutAsync();
+
+			return RedirectToAction("Index", "Home");
+		}
+	}
 }

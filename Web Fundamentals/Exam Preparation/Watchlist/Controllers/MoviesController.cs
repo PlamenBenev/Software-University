@@ -83,13 +83,13 @@ namespace Watchlist.Controllers
             return View("Watched",model);
         }
 
-        public async Task<IActionResult> RemoveFromWatched(int movieId)
+        public async Task<IActionResult> RemoveFromCollection(int movieId)
         {
 			var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
 			await movieService.RemoveMovieFromCollectionAsync(movieId,userId);
 
-            return RedirectToAction(nameof(Watched));
+            return RedirectToAction(nameof(this.Watched));
 
         }
     }
