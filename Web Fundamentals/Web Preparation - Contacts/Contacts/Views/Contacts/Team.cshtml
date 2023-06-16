@@ -1,0 +1,55 @@
+﻿@model IEnumerable<ContactViewModel>
+
+
+@{
+    ViewBag.title = "My Team";
+}
+
+
+<h2 class="text-center">@ViewBag.title</h2>
+<hr />
+
+<div class="text-center row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">first name</th>
+                <th scope="col">last name</th>
+                <th scope="col">e-mail</th>
+                <th scope="col">phone number</th>
+                <th scope="col">address</th>
+                <th scope="col">website</th>
+                <th scope="col">action</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @foreach (var contact in Model)
+            {
+                <tr>
+                    <th scope="row"></th>
+                    <td>@contact.FirstName</td>
+                    <td>@contact.LastName</td>
+                    <td>@contact.Email</td>
+                    <td>@contact.PhoneNumber</td>
+                    <td>@contact.Address</td>
+                    <td>@contact.Website</td>
+                    <td>
+                        <span style="float:left">
+                            <form class="input-group-sm" asp-controller="contacts" asp-action="removefromteam" asp-route-contactid="@contact">
+                                <input type="submit" value="remove from team" class="fs-6 btn btn-success mb-3 p-2" />
+                            </form>
+                        </span>
+                        <span style="float:right">
+                            <a asp-controller="contacts" asp-action="edit" asp-route-contactid="@contact" class="btn btn-primary">edit</a>
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
