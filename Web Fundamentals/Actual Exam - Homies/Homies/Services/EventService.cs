@@ -16,7 +16,6 @@ namespace Homies.Services
             context = _context;
         }
 
-
         public async Task AddEventAsync(AddEventViewModel model, string orginiserId)
         {
             var events = new Event
@@ -35,6 +34,13 @@ namespace Homies.Services
 
         }
 
+        public async Task<bool> AddedEventAsync(string userId, int eventModelId)
+        {
+            bool alreadyAdded = await context.EventsParticipants
+            .AnyAsync(x => x.HelperId == userId && x.EventId == eventModelId);
+
+            return alreadyAdded;
+        }
         public async Task AddToJoinedAsync(string userId, EventViewModel eventModel)
         {
             bool alreadyAdded = await context.EventsParticipants
@@ -51,7 +57,6 @@ namespace Homies.Services
                 await context.EventsParticipants.AddAsync(userEvent);
                 await context.SaveChangesAsync();
             }
-
         }
 
         public async Task<bool> EditEventAsync(EditViewModel model)
@@ -112,7 +117,25 @@ namespace Homies.Services
                         Start = e.Start,
                         End = e.End,
                         Types = types,
-                        TypeId = e.TypeId
+                        TypeId = e.TypeId,
+                    })
+                    .FirstOrDefaultAsync();
+        }
+
+        public async Task<DetailsViewModel> GetDetailsByIdAsync(int id)
+        {
+            return await context.Events
+                    .Where(x => x.Id == id)
+                    .Select(e => new DetailsViewModel()
+                    {
+                        Id = e.Id,
+                        Name = e.Name,
+                        Description = e.Description,
+                        Start = e.Start,
+                        End = e.End,
+                        TypeId = e.TypeId,
+                        Organiser = e.Organiser.UserName,
+                        Type = e.Type.Name
                     })
                     .FirstOrDefaultAsync();
         }

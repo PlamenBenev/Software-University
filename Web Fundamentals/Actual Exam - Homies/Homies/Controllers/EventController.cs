@@ -49,7 +49,7 @@ namespace Homies.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            EditViewModel contact = await eventService.GetEditByIdAsync(id);
+            var contact = await eventService.GetEditByIdAsync(id);
             if (contact == null)
             {
                 // Handle the case where the contact is not found
@@ -85,6 +85,11 @@ namespace Homies.Controllers
 
             var userId = GetUserId();
 
+            if (await eventService.AddedEventAsync(userId,id))
+            {
+                return RedirectToAction(nameof(All));
+            }
+
             await eventService.AddToJoinedAsync(userId, eventModel);
 
             return RedirectToAction(nameof(Joined));
@@ -106,7 +111,15 @@ namespace Homies.Controllers
 
             await eventService.RemoveFromJoinedAsync(GetUserId(), id);
 
-            return RedirectToAction(nameof(Joined));
+            return RedirectToAction(nameof(All));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var model = await eventService.GetDetailsByIdAsync(id);
+
+            return View(model);
         }
     }
 }
