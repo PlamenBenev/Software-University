@@ -34,20 +34,6 @@ namespace Homies.Data
             modelBuilder.Entity<EventParticipant>()
                 .HasKey(ep => new { ep.HelperId, ep.EventId });
 
-            modelBuilder
-               .Entity<Event>()
-               .HasData(new Event()
-               {
-                   Id = 5,
-                   Name = "Lorem Ipsum",
-                   Description = "sddgdg",
-                   OrganiserId = "Dolor Sit",
-                   Start = new DateTime(2023, 6, 17, 10, 30, 0),
-                   End = new DateTime(2023, 6, 17, 10, 30, 0),
-                   TypeId = 1,
-                   CreatedOn = new DateTime(2023, 6, 17, 10, 30, 0),
-               });
-
 
             modelBuilder
                 .Entity<DataModels.Type>()
